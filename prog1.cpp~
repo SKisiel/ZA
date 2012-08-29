@@ -1,0 +1,91 @@
+//---------------------------------------------------------------------------
+
+//#pragma hdrstop
+#include <iostream>
+#include <list>
+
+using namespace std;
+
+int potega(int x, int i){
+        if(i==0) return 1;
+        else return x*potega(x, i-1);
+}
+
+const char cyfry[] = {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
+//---------------------------------------------------------------------------
+
+//#pragma argsused
+int main(int argc, char* argv[])
+{
+        list <int> q;
+	q.clear();
+
+
+	string x;
+        int i, suma=0, dl, liczba, l, j;
+
+//****** Wczytywanie do listy skladnikow sumy: ****************************
+
+	while(true){
+	cout << "Podaj skladnik sumy: ";
+	cin >> x;
+        if (x=="0") break;
+        dl=x.length();
+
+                l=0,j=0;
+		for(i=dl-1;i>=0;i--){
+		liczba=int(x[i]);
+		if(liczba>47 && liczba<58) l+=(liczba-48)*potega(16,j);
+		if(liczba>64 && liczba<71) l+=(liczba-55)*potega(16,j);
+		if(liczba>96 && liczba<103) l+=(liczba-87)*potega(16,j);
+
+
+                j++;
+		}
+                j=0;
+                while(l>255){
+                        q.push_back(l%256);
+                        l=l/256;
+                        j++;
+                           }
+                        q.push_back(l);
+
+//******** Sumowanie:   *************************************************
+
+            for(i=0;i<=j;i++){
+            //cout << q.front() << endl;
+            suma+=q.front()*potega(256,i);
+            q.pop_front();
+
+            }
+        }
+
+        /*while (q.size()>0) {
+        cout << " " << q.front() << " ";
+        q.pop_front();
+	}
+        cout << "Suma wynosi: " << suma << endl; */
+
+//****** Wypisywanie sumy na ekran:  ***********************************
+        q.clear();
+        i=0;
+        while (suma >= 16){
+        q.push_back(suma%16);
+        suma=suma/16;
+        i++;
+        }
+
+        q.push_back(suma);
+        q.reverse();
+
+        cout << "Suma wynosi: ";
+        for (int j=i; j>=0; j--) {
+        cout << cyfry[q.front()];
+		q.pop_front();
+		}
+        cout << endl;
+//---------------------------------------------------------------------------
+        //system("pause");
+        return 0;
+}
+//---------------------------------------------------------------------------
